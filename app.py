@@ -15,6 +15,8 @@ page = st.sidebar.radio(
     ["Dashboard", "Traffic", "Parking", "Potholes"]
 )
 
+st.write("Backend:", backend_url)
+
 if page == "Dashboard":
     st.title("📊 Smart City Overview Dashboard")
 
@@ -29,6 +31,7 @@ if page == "Dashboard":
     with col3:
         st.metric("🕳️ Road Issues", "Low")
 
+
 elif page == "Traffic":
     st.title("🚦 Traffic Intelligence System")
 
@@ -36,23 +39,28 @@ elif page == "Traffic":
     question = st.text_input("Ask Question", "Reduce traffic congestion")
 
     if st.button("Analyze Traffic"):
-        res = requests.post(
-            f"{backend_url}/analyze",
-            json={
-                "city": city,
-                "module": "traffic",
-                "question": question
-            }
-        )
+        try:
+            res = requests.post(
+                f"{backend_url}/analyze",
+                json={
+                    "city": city,
+                    "module": "traffic",
+                    "question": question
+                },
+                timeout=30
+            )
 
-        if res.status_code == 200:
-            data = res.json()
+            if res.status_code == 200:
+                data = res.json()
 
-            st.subheader("📍 Traffic Data")
-            st.write(data["data"])
+                st.subheader("🤖 AI Analysis")
+                st.success(data["analysis"])
+            else:
+                st.error(res.text)
 
-            st.subheader("🤖 AI Analysis")
-            st.success(data["response"])
+        except Exception as e:
+            st.error(f"Request failed: {str(e)}")
+
 
 elif page == "Parking":
     st.title("🅿️ Smart Parking System")
@@ -61,23 +69,28 @@ elif page == "Parking":
     question = st.text_input("Ask Question", "Optimize parking system")
 
     if st.button("Check Parking"):
-        res = requests.post(
-            f"{backend_url}/analyze",
-            json={
-                "city": city,
-                "module": "parking",
-                "question": question
-            }
-        )
+        try:
+            res = requests.post(
+                f"{backend_url}/analyze",
+                json={
+                    "city": city,
+                    "module": "parking",
+                    "question": question
+                },
+                timeout=30
+            )
 
-        if res.status_code == 200:
-            data = res.json()
+            if res.status_code == 200:
+                data = res.json()
 
-            st.subheader("📍 Parking Data")
-            st.write(data["data"])
+                st.subheader("🤖 AI Analysis")
+                st.info(data["analysis"])
+            else:
+                st.error(res.text)
 
-            st.subheader("🤖 AI Analysis")
-            st.info(data["response"])
+        except Exception as e:
+            st.error(f"Request failed: {str(e)}")
+
 
 elif page == "Potholes":
     st.title("🕳️ Road Damage System")
@@ -86,23 +99,27 @@ elif page == "Potholes":
     question = st.text_input("Ask Question", "Detect road damage severity")
 
     if st.button("Detect Road Issues"):
-        res = requests.post(
-            f"{backend_url}/analyze",
-            json={
-                "city": city,
-                "module": "potholes",
-                "question": question
-            }
-        )
+        try:
+            res = requests.post(
+                f"{backend_url}/analyze",
+                json={
+                    "city": city,
+                    "module": "potholes",
+                    "question": question
+                },
+                timeout=30
+            )
 
-        if res.status_code == 200:
-            data = res.json()
+            if res.status_code == 200:
+                data = res.json()
 
-            st.subheader("📍 Road Data")
-            st.write(data["data"])
+                st.subheader("🤖 AI Analysis")
+                st.warning(data["analysis"])
+            else:
+                st.error(res.text)
 
-            st.subheader("🤖 AI Analysis")
-            st.error(data["response"])
+        except Exception as e:
+            st.error(f"Request failed: {str(e)}")
 
 st.markdown("---")
-st.caption("Smart City AI System")
+st.caption("Smart City AI System 🚀")
