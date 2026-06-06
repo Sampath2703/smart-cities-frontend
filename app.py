@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-backend_url = "http://127.0.0.1:8000"
+backend_url = st.secrets["backend_url"]
 
 st.set_page_config(
     page_title="Smart City AI Dashboard",
